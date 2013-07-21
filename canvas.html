@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rectangler</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+      function drawrect(ctxt, w, h) {
+        r = Math.round(Math.random() * 255);
+        g = Math.round(Math.random() * 255);
+        b = Math.round(Math.random() * 255);
+        color = 'rgb(' + r + ',' + g + ',' + b + ')';
+        ctxt.fillStyle = color;
+        x0 = Math.round(Math.random() * w);
+        y0 = Math.round(Math.random() * h);
+        x1 = Math.round(Math.random() * w);
+        y1 = Math.round(Math.random() * h);
+        ctxt.fillRect(x0, y0, x1, y1);
+      }
+      $(function(){
+          canvas = $("#screen").eq(0);
+          w = canvas.attr('width'); h = canvas.attr('height');
+          ctxt = canvas.get(0).getContext("2d");
+          when = 0;
+          for (i = 0; i < 200; i++) {
+              setTimeout('drawrect(ctxt, w, h)', (when += 50));
+          }
+          setTimeout("alert(\"That's all folks!!\")", when); 
+      });
+    </script>
+  </head>
+  <body>
+    <center>
+      <canvas id="screen" width="640" height="640"></canvas>
+    </center>
+  </body>
+</html>

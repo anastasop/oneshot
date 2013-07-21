@@ -1,0 +1,41 @@
+
+package search;
+//import "myproject/other_protos.proto";
+//option java_package = "com.example.foo";
+//option java_outer_classname = "Ponycopter";
+//option optimize_for = CODE_SIZE;
+
+message SearchRequest {
+	required string query = 1;
+	optional int32 page_number = 2 [default = 10];
+	optional int32 result_per_page = 3;
+	enum Corpus {
+		UNIVERSAL = 0;
+		WEB = 1;
+		IMAGES = 2;
+		LOCAL = 3;
+		NEWS = 4;
+		PRODUCTS = 5;
+		VIDEO = 6;
+	}
+	optional Corpus corpus = 4 [default = UNIVERSAL];
+}
+
+message SearchResponse {
+	repeated Result result = 1;
+}
+
+message Result {
+	required string url = 1;
+	optional string title = 2;
+	repeated string snippets = 3;
+}
+
+message Foo {
+	extensions 100 to 199;
+}
+
+extend Foo {
+	optional int32 bar = 126;
+}
+
