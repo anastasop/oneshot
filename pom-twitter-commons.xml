@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.github.anastasop</groupId>
+  <artifactId>twcommons</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>twcommons</name>
+  <description>twcommons</description>
+  <url>http://github.com/anastasop/twcommons</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>maven.twttr.com</id>
+      <name>Twitter Maven Repo</name>
+      <url>http://maven.twttr.com</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- Twitter Libraries -->
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>application</artifactId>
+      <version>0.0.61</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>application-module-applauncher</artifactId>
+      <version>0.0.40</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>application-module-lifecycle</artifactId>
+      <version>0.0.35</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>application-module-log</artifactId>
+      <version>0.0.44</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>application-module-http</artifactId>
+      <version>0.0.35</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>application-module-stats</artifactId>
+      <version>0.0.37</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>util</artifactId>
+      <version>0.0.77</version>
+    </dependency>
+
+    <!-- Guice -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>3.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-servlet</artifactId>
+      <version>3.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.5</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.mysema.maven</groupId>
+        <artifactId>apt-maven-plugin</artifactId>
+        <version>1.1.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-sources/java</outputDirectory>
+              <processor>com.twitter.common.args.apt.CmdLineProcessor</processor>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
