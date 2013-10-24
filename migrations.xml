@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+  <preConditions>
+    <dbms type="mysql" />
+    <runningAs username="spy" />
+  </preConditions>
+
+  <changeSet id="1" author="anastasop">
+    <createTable tableName="stories">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="title" type="varchar(1000)">
+        <constraints nullable="false" />
+      </column>
+      <column name="content" type="varchar(1000)">
+        <constraints nullable="false" />
+      </column>
+      <column name="published" type="timestamp">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+    <rollback>
+      <dropTable tableName="stories" />
+    </rollback>
+  </changeSet>
+
+  <changeSet id="2" author="anastasop">
+    <addColumn tableName="stories">
+      <column name="property_name" type="varchar(128)" defaultValue="none" >
+        <constraints nullable="false"/>
+      </column>
+      <column name="property_value" type="varchar(128)"  defaultValue="none" >
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+    <rollback>
+      <dropColumn tableName="stories" columnName="property_name"/>
+      <dropColumn tableName="stories" columnName="property_value"/>
+    </rollback>
+  </changeSet>
+
+</databaseChangeLog>
