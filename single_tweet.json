@@ -1,0 +1,192 @@
+[
+    {
+        "contributors": null, 
+        "coordinates": null, 
+        "created_at": "Fri Jan 24 09:34:11 +0000 2014", 
+        "entities": {
+            "hashtags": [], 
+            "symbols": [], 
+            "urls": [
+                {
+                    "display_url": "issues.apache.org/jira/browse/SO\u2026", 
+                    "expanded_url": "https://issues.apache.org/jira/browse/SOLR-5653", 
+                    "indices": [
+                        68, 
+                        91
+                    ], 
+                    "url": "https://t.co/FDWSyxhZBr"
+                }
+            ], 
+            "user_mentions": [
+                {
+                    "id": 8501652, 
+                    "id_str": "8501652", 
+                    "indices": [
+                        3, 
+                        9
+                    ], 
+                    "name": "Otis Gospodneti\u0107", 
+                    "screen_name": "otisg"
+                }
+            ]
+        }, 
+        "favorite_count": 0, 
+        "favorited": false, 
+        "geo": null, 
+        "id": 426649117566447616, 
+        "id_str": "426649117566447616", 
+        "in_reply_to_screen_name": null, 
+        "in_reply_to_status_id": null, 
+        "in_reply_to_status_id_str": null, 
+        "in_reply_to_user_id": null, 
+        "in_reply_to_user_id_str": null, 
+        "lang": "en", 
+        "place": null, 
+        "possibly_sensitive": false, 
+        "retweet_count": 7, 
+        "retweeted": false, 
+        "retweeted_status": {
+            "contributors": null, 
+            "coordinates": null, 
+            "created_at": "Fri Jan 24 07:22:30 +0000 2014", 
+            "entities": {
+                "hashtags": [], 
+                "symbols": [], 
+                "urls": [
+                    {
+                        "display_url": "issues.apache.org/jira/browse/SO\u2026", 
+                        "expanded_url": "https://issues.apache.org/jira/browse/SOLR-5653", 
+                        "indices": [
+                            57, 
+                            80
+                        ], 
+                        "url": "https://t.co/FDWSyxhZBr"
+                    }
+                ], 
+                "user_mentions": []
+            }, 
+            "favorite_count": 2, 
+            "favorited": false, 
+            "geo": null, 
+            "id": 426615979351617536, 
+            "id_str": "426615979351617536", 
+            "in_reply_to_screen_name": null, 
+            "in_reply_to_status_id": null, 
+            "in_reply_to_status_id_str": null, 
+            "in_reply_to_user_id": null, 
+            "in_reply_to_user_id_str": null, 
+            "lang": "en", 
+            "place": null, 
+            "possibly_sensitive": false, 
+            "retweet_count": 7, 
+            "retweeted": false, 
+            "source": "web", 
+            "text": "Solr getting more like Elasticsearch with new REST APIs: https://t.co/FDWSyxhZBr", 
+            "truncated": false, 
+            "user": {
+                "contributors_enabled": false, 
+                "created_at": "Wed Aug 29 03:06:08 +0000 2007", 
+                "default_profile": true, 
+                "default_profile_image": false, 
+                "description": "Sematext Founder.  Committer: Lucene, Solr, Nutch, Mahout, OpenRelevance.  Author: Lucene in Action", 
+                "entities": {
+                    "description": {
+                        "urls": []
+                    }, 
+                    "url": {
+                        "urls": [
+                            {
+                                "display_url": "sematext.com", 
+                                "expanded_url": "http://www.sematext.com/", 
+                                "indices": [
+                                    0, 
+                                    22
+                                ], 
+                                "url": "http://t.co/qzgtBkhQO4"
+                            }
+                        ]
+                    }
+                }, 
+                "favourites_count": 2, 
+                "follow_request_sent": false, 
+                "followers_count": 2523, 
+                "following": false, 
+                "friends_count": 125, 
+                "geo_enabled": false, 
+                "id": 8501652, 
+                "id_str": "8501652", 
+                "is_translator": false, 
+                "lang": "en", 
+                "listed_count": 190, 
+                "location": "", 
+                "name": "Otis Gospodneti\u0107", 
+                "notifications": false, 
+                "profile_background_color": "C0DEED", 
+                "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png", 
+                "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png", 
+                "profile_background_tile": false, 
+                "profile_image_url": "http://pbs.twimg.com/profile_images/88489852/photo_normal.jpg", 
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/88489852/photo_normal.jpg", 
+                "profile_link_color": "0084B4", 
+                "profile_sidebar_border_color": "C0DEED", 
+                "profile_sidebar_fill_color": "DDEEF6", 
+                "profile_text_color": "333333", 
+                "profile_use_background_image": true, 
+                "protected": false, 
+                "screen_name": "otisg", 
+                "statuses_count": 1965, 
+                "time_zone": "Quito", 
+                "url": "http://t.co/qzgtBkhQO4", 
+                "utc_offset": -18000, 
+                "verified": false
+            }
+        }, 
+        "source": "web", 
+        "text": "RT @otisg: Solr getting more like Elasticsearch with new REST APIs: https://t.co/FDWSyxhZBr", 
+        "truncated": false, 
+        "user": {
+            "contributors_enabled": false, 
+            "created_at": "Tue May 20 12:36:16 +0000 2008", 
+            "default_profile": true, 
+            "default_profile_image": false, 
+            "description": "", 
+            "entities": {
+                "description": {
+                    "urls": []
+                }
+            }, 
+            "favourites_count": 12, 
+            "follow_request_sent": false, 
+            "followers_count": 28, 
+            "following": true, 
+            "friends_count": 110, 
+            "geo_enabled": false, 
+            "id": 14844484, 
+            "id_str": "14844484", 
+            "is_translator": false, 
+            "lang": "en", 
+            "listed_count": 0, 
+            "location": "", 
+            "name": "Spyros", 
+            "notifications": false, 
+            "profile_background_color": "C0DEED", 
+            "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png", 
+            "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png", 
+            "profile_background_tile": false, 
+            "profile_image_url": "http://pbs.twimg.com/profile_images/413025315716202496/AHWGiK7U_normal.jpeg", 
+            "profile_image_url_https": "https://pbs.twimg.com/profile_images/413025315716202496/AHWGiK7U_normal.jpeg", 
+            "profile_link_color": "0084B4", 
+            "profile_sidebar_border_color": "C0DEED", 
+            "profile_sidebar_fill_color": "DDEEF6", 
+            "profile_text_color": "333333", 
+            "profile_use_background_image": true, 
+            "protected": false, 
+            "screen_name": "spyk", 
+            "statuses_count": 24, 
+            "time_zone": "Athens", 
+            "url": null, 
+            "utc_offset": 7200, 
+            "verified": false
+        }
+    } 
+]
