@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd /vagrant
+echo "starting server...."
+exec ./server.py 2>&1
