@@ -1,0 +1,16 @@
+
+queries:
+  - name: q1
+    description: "the first query"
+    cmd: "the first query"
+  - name: q2
+    description: "the second query"
+    cmd: "the second query"
+
+updates:
+  - name: u1
+    description: "the first update"
+    cmd: "the first update"
+  - name: u2
+    description: "the second update"
+    cmd: "the second update"
