@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"crypto/sha1"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -33,10 +34,22 @@ type DnsRequest struct {
 	respc chan DnsResponse
 }
 
+type Downloaders struct {
+	sync.Mutex
+	chans map[string]chan string
+}
+
+var downloadersForHosts = Downloaders{chans: make(map[string]chan string)}
+
 var defaultDnsCache = DnsCache{hosts: make(map[string]string)}
 var dnsResolveChannel = make(chan DnsRequest)
 
 func DnsResolver(c chan DnsRequest) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Printf("dns resolve failed: %v", r)
+		}
+	}()
 	for {
 		req, ok := <-c
 		if !ok {
@@ -52,12 +65,17 @@ func DnsResolver(c chan DnsRequest) {
 		} else {
 			addrs, err := net.LookupHost(req.host)
 			if err == nil {
-				defaultDnsCache.Lock()
-				defaultDnsCache.hosts[req.host] = addrs[0]
-				defaultDnsCache.Unlock()
-				log.Println("Resolved", req.host, "to", addrs[0])
-				req.respc <- DnsResponse{addr: addrs[0]}
+				if len(addrs) > 0 {
+					defaultDnsCache.Lock()
+					defaultDnsCache.hosts[req.host] = addrs[0]
+					defaultDnsCache.Unlock()
+					log.Println("Resolved", req.host, "to", addrs[0])
+					req.respc <- DnsResponse{addr: addrs[0]}
+				} else {
+					req.respc <- DnsResponse{err: errors.New("Empty DNS response: " + req.host)}
+				}
 			} else {
+				log.Println("Resolving: ", req.host, " failed", err.Error())
 				req.respc <- DnsResponse{err: err}
 			}
 		}
@@ -69,7 +87,7 @@ func ResolvingDial(network, addr string) (net.Conn, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	log.Println("ResolvingDial:", host, port)
 	var final_addr = host
 	if ip_addr := net.ParseIP(host); ip_addr == nil {
 		req := DnsRequest{host: host, respc: make(chan DnsResponse)}
@@ -77,11 +95,12 @@ func ResolvingDial(network, addr string) (net.Conn, error) {
 		resp := <-req.respc
 
 		if resp.err != nil {
-			return nil, err
+			return nil, resp.err
 		} else {
 			final_addr = resp.addr
 		}
 	}
+	log.Println("ResolvingDial Result:", network, final_addr)
 
 	log.Printf("Opening connection: %s!%s", network, final_addr)
 	return net.Dial(network, net.JoinHostPort(final_addr, port))
@@ -102,7 +121,6 @@ func main() {
 	}
 	defer fin.Close()
 
-	downloaders := make(map[string]chan string)
 	waitCh := make(chan int)
 
 	ndownloads := 0
@@ -110,12 +128,21 @@ func main() {
 	for scanner.Scan() {
 		s := scanner.Text()
 		if u, err := url.Parse(s); err == nil {
-			downloader, ok := downloaders[u.Host]
+			if u.Scheme == "https" {
+				continue
+			}
+			downloadersForHosts.Lock()
+			downloader, ok := downloadersForHosts.chans[u.Host]
+			downloadersForHosts.Unlock()
 			if !ok {
 				downloader = DownloaderForHost(u.Host, waitCh)
-				downloaders[u.Host] = downloader
+				downloadersForHosts.Lock()
+				downloadersForHosts.chans[u.Host] = downloader
+				downloadersForHosts.Unlock()
 			}
 			ndownloads++
+			//			cli := http.Client{Transport: &http.Transport{Dial: ResolvingDial}}
+			//			DownloadUrl(cli, s)
 			go func(c chan string) {
 				c <- s
 			}(downloader)
@@ -130,36 +157,49 @@ func main() {
 	}
 }
 
+func DownloadUrl(client http.Client, url string) {
+	log.Println("Get: ", url)
+	resp, err := client.Get(url)
+	if err == nil {
+		if resp.StatusCode == http.StatusOK {
+			hasher := sha1.New()
+			if _, err := io.Copy(hasher, resp.Body); err == nil {
+				fmt.Printf("%s sha1:%x\n", url, hasher.Sum(nil))
+			} else {
+				fmt.Printf("%s errn:%v\n", err)
+			}
+		} else {
+			fmt.Sprintf("%s http:%d", url, resp.StatusCode)
+			if _, err := io.Copy(ioutil.Discard, resp.Body); err != nil {
+				log.Println(err)
+			}
+		}
+		resp.Body.Close()
+	} else {
+		log.Println(err)
+	}
+}
+
 func DownloaderForHost(host string, endCh chan int) chan string {
 	client := http.Client{Transport: &http.Transport{Dial: ResolvingDial}}
-	hasher := sha1.New()
 
 	c := make(chan string)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Printf("downloader panic: %v", r)
+				downloadersForHosts.Lock()
+				delete(downloadersForHosts.chans, host)
+				downloadersForHosts.Unlock()
+			}
+		}()
 		url, ok := <-c
 		if !ok {
 			return
 		}
 
-		resp, err := client.Get(url)
-		if err == nil {
-			if resp.StatusCode == http.StatusOK {
-				hasher.Reset()
-				if _, err := io.Copy(hasher, resp.Body); err == nil {
-					fmt.Printf("%s sha1:%x\n", url, hasher.Sum(nil))
-				} else {
-					fmt.Printf("%s errn:%v\n", err)
-				}
-			} else {
-				fmt.Sprintf("%s http:%d", url, resp.StatusCode)
-				if _, err := io.Copy(ioutil.Discard, resp.Body); err != nil {
-					log.Println(err)
-				}
-			}
-			resp.Body.Close()
-		} else {
-			log.Println(err)
-		}
+		DownloadUrl(client, url)
+
 		endCh <- 1
 	}()
 	return c
