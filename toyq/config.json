@@ -1,0 +1,20 @@
+{
+    "database": {
+        "driver": "mysql",
+        "dsn": "spyros:spyros@/toys"
+    },
+
+    "queries": [
+        {
+            "name": "counter",
+            "sql": "select count(*) as c from toy1",
+            "out": "Total count is {{.c}}"
+        },
+        {
+            "name": "select",
+            "params": "id",
+            "sql": "select * from toy1 where id > ?",
+            "out": "Id: {{.id}} Name: {{.name}}\n"
+        }
+    ]
+}
