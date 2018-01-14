@@ -25,9 +25,16 @@ type query struct {
 	Out    string `json:"out"`
 }
 
+type update struct {
+	Name   string `json:"name"`
+	U      string `json:"sql"`
+	Params string `json:"params"`
+}
+
 type config struct {
 	Database *database `json:"database"`
 	Queries  []*query  `json:"queries"`
+	Updates  []*update `json:"updates"`
 }
 
 func readConfig() (*config, error) {
@@ -55,7 +62,25 @@ func getDB(cfg *config) (*sql.DB, error) {
 	return db, nil
 }
 
-func exec(db *sql.DB, q *query, flags *flag.FlagSet) error {
+func execUpdate(db *sql.DB, u *update, flags *flag.FlagSet) error {
+	args := make([]interface{}, 0, flags.NFlag())
+	flags.Visit(func(fn *flag.Flag) {
+		t, ok := fn.Value.(flag.Getter)
+		if ok {
+			args = append(args, t.Get())
+		} else {
+			log.Println("Value for", fn.Name, "is not a getter")
+		}
+	})
+
+	_, err := db.Exec(u.U, args...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func execQuery(db *sql.DB, q *query, flags *flag.FlagSet) error {
 	tmpl, err := template.New("q").Parse(q.Out)
 	if err != nil {
 		return err
@@ -106,6 +131,9 @@ func exec(db *sql.DB, q *query, flags *flag.FlagSet) error {
 
 var cfgFile = flag.String("cfg", "./config.json", "config file")
 
+func flagDriver() {
+}
+
 func main() {
 	log.SetFlags(0)
 	log.SetPrefix("toyq: ")
@@ -120,29 +148,51 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 
-	qname := flag.Arg(0)
-	if qname == "" {
-		log.Fatal("no query name")
+	opname := flag.Arg(0)
+	if opname == "" {
+		log.Fatal("no op name")
 	}
+
 	var query *query
+	var update *update
+
 	for _, q := range cfg.Queries {
-		if q.Name == qname {
+		if q.Name == opname {
 			query = q
 			break
 		}
 	}
-	if query == nil {
-		log.Fatal("no query with name ", qname)
+	for _, u := range cfg.Updates {
+		if u.Name == opname {
+			update = u
+			break
+		}
+	}
+	if query == nil && update == nil {
+		log.Fatal("no operation with name ", opname)
 	}
 
-	flags := flag.NewFlagSet("args", flag.ExitOnError)
-	for _, param := range strings.Fields(query.Params) {
-		flags.String(param, "", "set query param")
-	}
-	flags.Parse(flag.Args()[1:])
+	if query != nil {
+		flags := flag.NewFlagSet("args", flag.ExitOnError)
+		for _, param := range strings.Fields(query.Params) {
+			flags.String(param, "", "set query param")
+		}
+		flags.Parse(flag.Args()[1:])
 
-	if err := exec(db, query, flags); err != nil {
-		log.Fatal(err)
+		if err := execQuery(db, query, flags); err != nil {
+			log.Fatal(err)
+		}
+	} else if update != nil {
+		flags := flag.NewFlagSet("args", flag.ExitOnError)
+		for _, param := range strings.Fields(update.Params) {
+			flags.String(param, "", "set update param")
+		}
+		flags.Parse(flag.Args()[1:])
+
+		if err := execUpdate(db, update, flags); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

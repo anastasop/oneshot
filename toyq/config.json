@@ -15,6 +15,19 @@
             "params": "id",
             "sql": "select * from toy1 where id > ?",
             "out": "Id: {{.id}} Name: {{.name}}\n"
+        },
+        {
+            "name": "dump",
+            "sql": "select * from toy1",
+            "out": "Id: {{.id}} Name: {{.name}}\n"
+        }
+    ],
+
+    "updates": [
+        {
+            "name": "inserter",
+            "sql": "insert into toy1 values(?, ?)",
+            "params": "id name"
         }
     ]
 }
