@@ -1,0 +1,179 @@
+
+/* You need 4 fonts to cover bold/italic combinations */
+/* Google fonts use also <link> @import */
+@font-face {
+    font-family: "Go Regular";
+    font-weight: normal; /* normal or bold */
+    font-style: normal;  /* normal or italic */
+    src: url('./fonts/Go-Regular.ttf');
+}
+
+/* browser defaults: 16px font, 120% line-height */
+
+.troff {
+    /* line-height: 120%; */
+    text-align: justify;
+    text-indent: 5em;
+    margin-top: 40px;
+    margin-bottom: 60px;
+    margin-left: 50px;
+    border: 4px solid;
+}
+p.troff::first-letter {
+    font-weight: bold;
+    font-size: 200%;
+    color: red;
+}
+p.troff::first-line {
+    font-variant: small-caps;
+}
+
+.pretty {
+    font-family: "Go Regular";
+    font-style: normal;
+    /*
+      font-size: medium; xx-small, x-small, small, medium, large, x-large, xx-large
+    */
+    font-size: 200%;
+    /* font-variant: small-caps; */
+
+    /*
+      aqua,black, blue, fuchsia, gray, green, lime, maroon, navy,
+      olive, orange, purple, red, silver, teal, white, yellow
+    */
+    color: teal;
+    text-transform: capitalize; /* uppercase lowercase capitalize */
+
+    /*
+      underline, overline, line-through
+      (a color)
+      solid double dotted dashed wavy
+    */
+    text-decoration: overline red dotted;
+    text-shadow: -4px -4px 0px #999999;
+    letter-spacing: 4px;
+    word-spacing: 8px;
+    color: navy;
+}
+
+/*
+  block level box
+  inline box: you can't increase height with padding or margin
+*/
+
+.abox {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 4px outset blue;
+    border-radius: 40px 30px 20px 10px;
+    background-color: lightgreen;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em;
+    display: block; /* block inline inline-box and many more */
+    box-shadow: 4px 6px 8px black;
+    height: 32px; /* set height of content. See box-sizing */
+    width: 128px; /* set width of content. See box-sizing */
+    box-sizing: content-box; /* content-box padding-box border-box */
+    overflow: hidden; /* visible scroll auto hidden */
+    /*
+    max-width: 640px;
+    max-height: 480px;
+    min-width: 320px;
+    min-height: 240px;
+    */
+}
+
+.fleft {
+    /* use overflow: hidden for backgrounds and borders */
+    float: left;
+}
+
+.fright {
+    /* use overflow: hidden for backgrounds and borders */
+    float: right;
+}
+
+.aabox {
+    clear: both; /* left right both none */ /* Also use when floating many images */
+}
+
+.gbox {
+    background-image: url(./images/star.png);
+    background-repeat: repeat; /* no-repeat repeat pepeat-x repeat-y round space */
+    background-position: right center; /* left center right top center bottom */
+    /* background-position: 5px 8px */
+    background-attackment: fixed; /* fixed scroll : use when scrolling is an issue */
+    background-origin: content-box; /* context-box padding-box border-box */
+    background-clip: content-box; /* context-box padding-box border-box */
+    background-size: 10% 100%; /* contain (resize respect aspect ratio) cover (resize) */
+    background-blend-mode: normal; /* normal multiply screen overlay darken lighten color */
+
+    /* background-image can take multiply values that create beautiful tiles */
+    /* background-image: linear-gradient(to right, black, white); */
+}
+
+/* order matters link visited hover active because of cascading */
+nav a {
+    text-decoration: none;
+    font-weight: bold;
+}
+nav a:link {
+    color: green;
+}
+nav a:visited {
+    color: red;
+}
+nav a:hover {
+    color: navy;
+    font-size: 150%;
+    text-decoration: underline;
+}
+nav a:active {
+    font-size: 300%;
+}
+a.btn {
+    border: solid 1px rgb(0, 0, 0);
+    background-color: yellow;
+}
+ul.nav {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+    border-bottom: 1px dashed #000;
+}
+ul.nav a {
+    display: block;
+    width: 8em;
+    height: 1.25em;
+    line-height: 1.25em;
+}
+.nav li {
+    display: inline;
+}
+
+/* checkout CSS sprites */
+
+#tblA {
+    border: solid;
+    border-spacing: 0;
+    border-collapse: collapse; /* separate collapse */
+}
+
+#tblA td {
+    padding-top: 10px;
+    padding-right: 50px;
+    text-align: right;
+    vertical-align: top; /* top baseline middle bottom */
+    border: solid;
+    border-radius: 4px; /* works only with separate border-collapse */
+}
+
+#tblA tr:nth-of-type(even) {
+    background-color: red;
+}
+
+#first {
+    width: 200px;
+    background-color: green;
+}
