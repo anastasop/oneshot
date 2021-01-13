@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSS layouts</title>
+    <style>
+      .left-column {
+	  float: left;
+	  width: 80px;
+      }
+      .right-column {
+	  margin-left: 82px;
+      }
+      .withBorder {
+	  border: 1px solid;
+      }
+      .moved {
+	  position: absolute; /* absolute relative fixed static */
+	  top: 0;
+	  bottom: 0;
+	  left: 0;
+	  right: 0;
+      }
+      .postit {
+	  position: absolute; /* out of the flow */
+	  background-color: yellow;
+	  left: 50px;
+	  top: 50px;
+	  padding: 20px;
+	  z-index: -1; /* larger value, closer to the top of the stack */
+      }
+      .corkboard {
+	  /* visibility: hidden; */ /* still takes area */ /* collapse hidden visible */
+	  background-color: rgba(0, 255, 0, 0.5);
+	  width: 500px;
+	  height: 200px;
+	  position: relative; /* position when needed must be explicit */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Float based layout</h1>
+    <div class="container1">
+      <div class="left-column">
+	<img src="./images/star.png" width="70" class="withBorder"/>
+	<img src="./images/star.png" width="70" class="withBorder"/>
+	<img src="./images/star.png" width="70" class="withBorder"/>
+      </div>
+      <div class="right-column">
+	To Sherlock Holmes she is always the woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex. It was not that he felt any emotion akin to love for Irene Adler. All emotions, and that one particularly, were abhorrent to his cold, precise, but admirably balanced mind. He was, I take it, the most perfect reasoning and observing machine that the world has seen; but, as a lover, he would have placed himself in a false position. He never spoke of the softer passions, save with a gibe and a sneer. They were admirable things for the observer—excellent for drawing the veil from men's motives and actions. But for the trained reasoner to admit such intrusions into his own delicate and finely adjusted temperament was to introduce a distracting factor which might throw a doubt upon all his mental results. Grit in a sensitive instrument, or a crack in one of his own high-power lenses, would not be more disturbing than a strong emotion in a nature such as his. And yet there was but one woman to him, and that woman was the late Irene Adler, of dubious and questionable memory.
+      </div>
+    </div>
+    <h1>Positioning Elements</h1>
+    Hello&nbsp;<span style="position: relative; left: -10px;">World</span> from CSS
+    <div class="postit">Remember the milk!</div>
+    <div class="corkboard">
+      <div class="postit">Remember the milk!</div>
+    </div>
+    Under the corkboard
+  </body>
+</html>
