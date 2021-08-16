@@ -1,0 +1,181 @@
+
+Git implements the history of commits within a repo as a DAG. 
+
+.git/config    # --file
+~/.gitconfig   # --global
+/etc/gitconfig # --system
+
+git config --global user.name
+git config --global user.email
+git config -l
+git config --global alias.show-graph 'log --graph --abbrev-commit --pretty=oneline'
+
+git init
+git add files...
+git rm files... # remove(make untracked)  from index and/or working dir. Use rm(1) for workdir
+git mv files...
+git status
+git commit
+git log
+git log --follow file # full history in case of mv
+git log --abbrev-commit --pretty=short
+git log master~12..master~10 # since..until # since is not shown 
+git log Y # all commit reachable from Y
+git log X..Y # all commit reachable from Y but not X. (start is not included)
+git log ^X Y # same as above
+git log -Sstring # pickaxe, search diffs for string
+git bisect
+git blame
+git show
+git diff # working directory and index
+git diff <commit> # working directory and commit 
+git diff --cached commit # staged index and commit
+git diff commit1 commit2 # between 2 commits
+git diff --M # detect renames
+git diff X..Y # show toal set of differences
+git branch # show branches
+git branch -d <name> # delete branch
+git branch -D <name> # delete branch and ignore commits of branch
+git checkout <name>
+git checkout -b <name> #create and checkout new branch
+git checkout -m <name> # merge local changes with branch
+git show-branch # more detailed than git branch
+git branch <name> [starting-commit] # create branch
+git merge-base original-branch new-branch # find the commit from which the branch started
+git merge origin/master
+
+git reset
+git reset --soft commit # index and work dir are left unchanges
+git reset --mixed commit # index changes but not work dir
+git reset --hard commit # index and work dir change
+git cherry-pick
+git revert
+git commit --amend
+
+git rebase
+git rebase master dev # instead of checkout dev and rebase 
+git rebase --onto # TODO
+git rebase -i
+
+git tag -m "tag version 1.0" # created an annotated tag, a real object in the store
+
+git clone <existing repo. url or dir> <new dir>
+
+git show-branch # concise, one-line summaries for the current development branch
+
+git cat-file # for files in .git
+git write-tree # create a tree object for the current index
+git ls-files # Show information about files in the index and the working treeShow .
+
+git hash-object # compute SHA1 and optionally create a blob 
+
+git rev-parse: translae any form of commit name into an actual hash ID
+
+# Repositories
+
+A remote is a reference to another repository through a filesystem or network path.
+Git uses remote-tracking branches, i.e each one is a branch that serves as a proxy
+for a specific branch in a remote repository. There is also the local-tracking
+brancj that forms the basis for integrating local changes with the remote changes
+from a corresponding remote-tracking branch.
+
+A development repository is a repo as you know it.
+A bare repository has no working directory or a checked out branch. It servers to
+push and fetch updates.
+
+Git maintains a link back to its parent via a remote called origin. The remote
+repositories branches are available in the clone on branch names prefixed
+with origin/.
+
+git clone     # creates a new repo based on the original
+git remote    # create, remove, manipulate and view a remote
+git fetch     # retrieves objects and metadata from a report repository
+git fetch <remote> <branch>
+git pull      # like fetch but also merges changes into a corresponding local branch
+git pull <remote>
+git push      # transfers objects and metadata to a remote repository
+git push <remote> <branch>
+git ls-remote # shows a list of references held by a given remote
+
+## example
+git clone <url>
+git clone --bare ~/public_html public_html.git
+git remote add origin /tmp/Depot/public_html
+git remote update
+git fetch
+git pull # fetch + merge
+git pull origin master # fetch + merge
+git push origin master
+##
+
+git branch --set-upstream-to=origin/<branch> master
+git push <remote> --delete <branch>
+
+TODO: refspecs ex +refs/heads/*:refs/heads/*
+
+# Concepts
+
+Repository: a database for the history and the revisions
+Object store: original files, log messages, authors, dates etc
+  - blobs: each version of a file is a blog. Only data not metadata or even names
+  - trees: one level of directory information
+  - commits: metadata for each change. Points to a tree, the state of the repo at the time
+  - tags: a readable name to an object usually a commit
+Index: a temp and dynamic file that describes the dir structure of the repository at some time
+
+Each object in the store has a unique name based on the contents (SHA1)
+  - git tracks content, not filenames or directories
+  - internal db stores every version of every file. History is a set of changes between
+    different blobs with varying hashes, rather than a filename and a set of differences.
+
+# Index
+
+- tracked: any file already in the repository or the index
+- ignored: check .gitignore
+- untracked: not in any other category
+
+# Commits
+
+Git supports/favors atomic commits.
+
+1fbb58b4
+HEAD
+
+# Refs
+
+Ref: A SHA1 hash for an object usually a commit
+Symref: indirect ref
+  .git/ref
+  .git/refs/ref
+  .git/refs/tags/ref
+  .git/refs/heads/ref
+  .git/refs/remotes/ref
+  .git/refs/remotes/ref/HEAD
+
+Special symrefs
+HEAD       most recent commit
+ORIG_HEAD  previous HEAD for merge, reset
+FETCH_HEAD head of last branch fetched
+MERGE_HEAD tip of other branch during a merge
+
+A commit can have multiple parents iff it is a merge commit
+C^1 first parent
+C^2 second parent
+
+~ is used to go back before an ancestral parent and select a preceding generation
+C~1 first parent
+C~2 first grandparent
+C~3 first great-grandparent
+
+# Branches
+
+name of the branch always refere to the most recent revision committed. tip or head
+
+detached HEAD: an anonymous branch for any commit
+- checkout a commit that is not the HEAD
+- checkout a tracking branch
+- checkout a commit referenced by a tag
+- git bisect
+- git submodule update
+
+
