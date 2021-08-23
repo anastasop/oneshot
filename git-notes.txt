@@ -178,4 +178,5 @@ detached HEAD: an anonymous branch for any commit
 - git bisect
 - git submodule update
 
+# Notes
 
