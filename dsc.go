@@ -6,9 +6,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"image"
 	"image/jpeg"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/disintegration/imaging"
 	"github.com/rwcarlsen/goexif/exif"
 )
 
@@ -102,6 +103,22 @@ func newPhoto(path string, info os.FileInfo, buf *bytes.Buffer) *photo {
 var photos = make(map[string]*photo)
 
 func copyPhoto(p *photo, buf *bytes.Buffer) {
+	img, err := imaging.Decode(buf, imaging.AutoOrientation(true))
+	if err != nil {
+		log.Print("ERROR: ", p.path, err)
+		return
+	}
+	var img2 image.Image
+	if !*notRsc {
+		if p.width > p.height {
+			img2 = imaging.Resize(img, 1024, 0, imaging.Lanczos)
+		} else {
+			img2 = imaging.Resize(img, 0, 768, imaging.Lanczos)
+		}
+	} else {
+		img2 = img
+	}
+
 	t := p.exifTime
 	dir := filepath.Join(*dst, fmt.Sprintf("%04d-%02d", t.Year(), int(t.Month())))
 
@@ -110,7 +127,12 @@ func copyPhoto(p *photo, buf *bytes.Buffer) {
 	}
 
 	fname := filepath.Join(dir, fmt.Sprintf("IMG_%04d%02d%02dT%02d%02d%02d.jpg", t.Year(), int(t.Month()), t.Day(), t.Hour(), t.Minute(), t.Second()))
-	if err := ioutil.WriteFile(fname, buf.Bytes(), 0644); err != nil {
+	if fout, err := os.Create(fname); err == nil {
+		if err := imaging.Encode(fout, img2, imaging.JPEG); err != nil {
+			panic(err)
+		}
+		fout.Close()
+	} else {
 		panic(err)
 	}
 }
@@ -171,6 +193,7 @@ var src = flag.String("s", ".", "dir to scan")
 var dst = flag.String("d", ".", "dir for copies")
 var reStr = flag.String("r", "(?i)^(IMG|DSC|XRS).*JPG$", "regex for file names")
 var doCopy = flag.Bool("c", false, "do copy")
+var notRsc = flag.Bool("n", true, "do not resize")
 var re *regexp.Regexp
 
 func main() {
